@@ -6,12 +6,13 @@
 </head>
 <body>
 <h1 style='font-size: 48px;font-size: 3.5vw;position: fixed;top: 50%; transform: translate(5%, -70%);'>
-  <span id="paper">-1</span> out of <span id="bukkit">-1</span> servers on 1.15 run Paper!<br>
+  <span id="paper">-1</span> out of <span id="bukkit">-1</span> servers on <span id="ver">1.15.2</span> run Paper!<br>
   Thats <span id="percent">-1</span> percent!
 </h1>
 <script>
 var paper = -1;
 var bukkit = -1;
+var version = "1.15.2" 
 
 var getJSON = function(url, callback) {
   var xhr = new XMLHttpRequest();
@@ -25,7 +26,7 @@ var getJSON = function(url, callback) {
         if (data.hasOwnProperty(key)) {
           console.log(data[key]);
           console.log(data[key].name);
-          if (data[key].name == "1.15.2") {
+          if (data[key].name == version) {
             callback(null, data[key].y);
             return;
           }
@@ -40,10 +41,12 @@ var getJSON = function(url, callback) {
 };
 
 var updateView = function() {
+  document.getElementById("ver").innerHTML = version;
   document.getElementById("paper").innerHTML = paper;
   document.getElementById("bukkit").innerHTML = bukkit;
   document.getElementById("percent").innerHTML = (paper == -1 || bukkit == -1) ? -1 : (paper / bukkit * 100).toFixed(2);
 };
+updateView(); 
 
 getJSON("https://bstats.org/api/v1/plugins/580/charts/minecraft_version/data", function(err, data) {
   if (err) {
