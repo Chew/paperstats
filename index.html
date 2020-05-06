@@ -24,8 +24,6 @@ var getJSON = function(url, callback) {
       var data = xhr.response;
       for (var key in data) {
         if (data.hasOwnProperty(key)) {
-          console.log(data[key]);
-          console.log(data[key].name);
           if (data[key].name == version) {
             callback(null, data[key].y);
             return;
