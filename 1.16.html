@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+ <title>How big is Papers marketshare today?</title>
+</head>
+<body>
+<h1 style='font-size: 48px;font-size: 3.5vw;position: fixed;top: 50%; transform: translate(5%, -70%);'>
+  <span id="paper">-1</span> out of <span id="bukkit">-1</span> servers on <span id="ver">1.15.2</span> run Paper!<br>
+  Thats <span id="percent">-1</span> percent!
+</h1>
+<script>
+var paper = -1;
+var bukkit = -1;
+var version = "1.16.1" 
+
+var getJSON = function(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = 'json';
+  xhr.onload = function() {
+    var status = xhr.status;
+    if (status === 200) {
+      var data = xhr.response;
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          if (data[key].name == version) {
+            callback(null, data[key].y);
+            return;
+          }
+        }
+      }
+      callback("No 1.16.1 found?", -1);
+    } else {
+      callback(status, xhr.response);
+    }
+  };
+  xhr.send();
+};
+
+var updateView = function() {
+  document.getElementById("ver").innerHTML = version;
+  document.getElementById("paper").innerHTML = paper;
+  document.getElementById("bukkit").innerHTML = bukkit;
+  document.getElementById("percent").innerHTML = (paper == -1 || bukkit == -1) ? -1 : (paper / bukkit * 100).toFixed(2);
+};
+updateView(); 
+
+getJSON("https://bstats.org/api/v1/plugins/580/charts/minecraft_version/data", function(err, data) {
+  if (err) {
+    console.log(err);
+  } else {
+    paper = data;
+    updateView();
+  }
+});
+getJSON("https://bstats.org/api/v1/plugins/1/charts/minecraftVersion/data", function(err, data) {
+  if (err) {
+    console.log(err);
+  } else {
+    bukkit = data;
+    updateView();
+  }
+});
+</script>
+</body>
+</html>
