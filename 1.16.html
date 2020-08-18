@@ -22,15 +22,19 @@ var getJSON = function(url, callback) {
     var status = xhr.status;
     if (status === 200) {
       var data = xhr.response;
+      var y = 0;
       for (var key in data) {
         if (data.hasOwnProperty(key)) {
           if (data[key].name.startsWith(version)) {
-            callback(null, data[key].y);
-            return;
+            y = y + data[key].y;
           }
         }
       }
-      callback("No " + version + " found?", -1);
+      if (y == 0) {
+        callback("No " + version + " found?", -1);
+      } else {
+        callback(null, y);
+      }
     } else {
       callback(status, xhr.response);
     }
